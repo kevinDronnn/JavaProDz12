@@ -13,9 +13,24 @@ public class Main {
         System.out.println(MySingleton3.INSTANCE);
         System.out.println(MySingleton3.INSTANCE);
 
-        MySingletonThreadSafe first = MySingletonThreadSafe.getInstance();
-        System.out.println(first.getClass());
-        MySingletonThreadSafe second = MySingletonThreadSafe.getInstance();
-        System.out.println(first == second);
+        Thread threadFoo = new Thread(new ThreadFoo());
+        Thread threadBar = new Thread(new ThreadBar());
+        threadFoo.start();
+        threadBar.start();
+    }
+    static class ThreadFoo implements Runnable {
+        @Override
+        public void run() {
+            MySingletonThreadSafe singleton = MySingletonThreadSafe.getInstance("FOO");
+            System.out.println(singleton.value);
+        }
+    }
+
+    static class ThreadBar implements Runnable {
+        @Override
+        public void run() {
+            MySingletonThreadSafe singleton = MySingletonThreadSafe.getInstance("BAR");
+            System.out.println(singleton.value);
+        }
     }
 }
